@@ -29,7 +29,7 @@ https://kautsarfebia.vercel.app
 
 ## 📸 Preview
 
-(gambar preview)
+<img width="1200" height="630" alt="Desain tanpa judul" src="https://github.com/user-attachments/assets/08ebb47f-2cd9-4994-9376-bd1deab2ccee" />
 
 ## 📄 License
 
