@@ -1,0 +1,221 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Bebas Neue", "Anton", sans-serif;
+  --font-body: "Inter", "Poppins", sans-serif;
+  --color-neon-pink: #FF2E93;
+  --color-neon-purple: #7C3AED;
+  --color-neon-cyan: #22D3EE;
+  --color-neon-orange: #FB923C;
+  --color-gta-dark: #0B0F1A;
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/bebasneue/v14/JTUSjIg69CK48gW7PXoo9Wlhyw.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2) format('woff2');
+}
+
+:root {
+  --bg: #0B0F1A;
+  --bg-soft: #11172A;
+  --text: #E8ECF4;
+  --text-soft: #94A3B8;
+}
+
+html.light {
+  --bg: #F0F2F8;
+  --bg-soft: #FFFFFF;
+  --text: #0B0F1A;
+  --text-soft: #475569;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* Grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* GTA grid background */
+.gta-grid {
+  background-image:
+    linear-gradient(rgba(255,46,147,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34,211,238,0.07) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Neon text glow */
+.neon-text-pink {
+  color: #FF2E93;
+  text-shadow: 0 0 5px rgba(255,46,147,0.8), 0 0 20px rgba(255,46,147,0.5), 0 0 40px rgba(255,46,147,0.3);
+}
+.neon-text-cyan {
+  color: #22D3EE;
+  text-shadow: 0 0 5px rgba(34,211,238,0.8), 0 0 20px rgba(34,211,238,0.5), 0 0 40px rgba(34,211,238,0.3);
+}
+.neon-text-purple {
+  color: #7C3AED;
+  text-shadow: 0 0 5px rgba(124,58,237,0.8), 0 0 20px rgba(124,58,237,0.5);
+}
+.neon-text-orange {
+  color: #FB923C;
+  text-shadow: 0 0 5px rgba(251,146,60,0.8), 0 0 20px rgba(251,146,60,0.5);
+}
+
+/* Neon border glow */
+.neon-border-pink {
+  border: 1px solid rgba(255,46,147,0.5);
+  box-shadow: 0 0 10px rgba(255,46,147,0.3), inset 0 0 10px rgba(255,46,147,0.1);
+}
+.neon-border-cyan {
+  border: 1px solid rgba(34,211,238,0.5);
+  box-shadow: 0 0 10px rgba(34,211,238,0.3), inset 0 0 10px rgba(34,211,238,0.1);
+}
+.neon-border-purple {
+  border: 1px solid rgba(124,58,237,0.5);
+  box-shadow: 0 0 10px rgba(124,58,237,0.3), inset 0 0 10px rgba(124,58,237,0.1);
+}
+
+/* Glitch effect */
+.glitch {
+  position: relative;
+  display: inline-block;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.glitch::before {
+  color: #22D3EE;
+  animation: glitch-1 3s infinite linear alternate-reverse;
+  clip-path: inset(0 0 60% 0);
+}
+.glitch::after {
+  color: #FF2E93;
+  animation: glitch-2 2.5s infinite linear alternate-reverse;
+  clip-path: inset(60% 0 0 0);
+}
+@keyframes glitch-1 {
+  0%,90%,100% { transform: translate(0); opacity: 0; }
+  92% { transform: translate(-3px,1px); opacity: 0.8; }
+  94% { transform: translate(2px,-1px); opacity: 0.6; }
+  96% { transform: translate(-2px,2px); opacity: 0.8; }
+  98% { transform: translate(1px,-2px); opacity: 0.5; }
+}
+@keyframes glitch-2 {
+  0%,88%,100% { transform: translate(0); opacity: 0; }
+  90% { transform: translate(3px,-1px); opacity: 0.7; }
+  93% { transform: translate(-2px,1px); opacity: 0.6; }
+  95% { transform: translate(2px,2px); opacity: 0.8; }
+  97% { transform: translate(-1px,-2px); opacity: 0.5; }
+}
+
+/* Neon flicker */
+@keyframes flicker {
+  0%,18%,22%,25%,53%,57%,100% { opacity: 1; }
+  20%,24%,55% { opacity: 0.4; }
+}
+.flicker { animation: flicker 4s infinite; }
+
+/* Floating animation */
+@keyframes float {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(8deg); }
+}
+.float-anim { animation: float 8s ease-in-out infinite; }
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #FF2E93, #7C3AED, #22D3EE);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-text-sunset {
+  background: linear-gradient(135deg, #FB923C, #FF2E93, #7C3AED);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(17,23,42,0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,46,147,0.2);
+}
+html.light .glass {
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(124,58,237,0.2);
+}
+
+/* Neon button */
+.neon-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.neon-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+.neon-btn:hover::before { transform: translateX(100%); }
+
+/* Progress bar shine */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.progress-bar {
+  background: linear-gradient(90deg, #FF2E93, #7C3AED, #22D3EE, #FF2E93);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: #0b0f1a00; }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(#FF2E93, #7C3AED);
+  border-radius: 5px;
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
