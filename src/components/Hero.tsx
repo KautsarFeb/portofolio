@@ -63,7 +63,7 @@ export default function Hero() {
               <div className="w-full h-full rounded-full bg-[var(--bg)]" />
             </motion.div>
             <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden border-2 border-[#FF2E93]/50" style={{ boxShadow: '0 0 40px rgba(255,46,147,0.4)' }}>
-              <img src="/images/profile2.jpg" loading="lazy" decoding="async" alt="Kautsar Febia Nadha" className="w-full h-full object-cover" />
+              <img src="/images/profile.jpg" loading="lazy" decoding="async" alt="Kautsar Febia Nadha" className="w-full h-full object-cover" />
             </div>
             {/* Floating badge */}
             <motion.div
