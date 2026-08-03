@@ -1,120 +1,189 @@
-import { useEffect, useState } from 'react';
-import { Menu, X, Moon, Sun } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { useTheme } from '../contexts/ThemeContext';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { Menu, X, Moon, Sun } from "lucide-react";
+import { motion } from "framer-motion";
+import { useTheme } from "../contexts/ThemeContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const links = [
-  { label: 'Home', href: '#home' },
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Education', href: '#education' },
-  { label: 'Certificates', href: '#certificates' },
-  { label: 'Contact', href: '#contact' },
+  { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Education", href: "#education" },
+  { label: "Certificates", href: "#certificates" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const [activeSection, setActiveSection] = useState("#home");
   const { theme, toggle } = useTheme();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const getHref = (href: string) => {
-    return location.pathname === '/' ? href : `/${href}`;
+  useEffect(() => {
+    const updateActiveSection = () => {
+      const offset = window.scrollY + 140;
+      let current = links[0].href;
+
+      for (const link of links) {
+        const section = document.getElementById(link.href.replace("#", ""));
+
+        if (!section) continue;
+
+        const top = section.offsetTop - 140;
+        const bottom = top + section.offsetHeight;
+
+        if (offset >= top && offset < bottom) {
+          current = link.href;
+          break;
+        }
+      }
+
+      setActiveSection(current);
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+    };
+  }, []);
+
+  const getHref = (href: string) =>
+    location.pathname === "/" ? href : `/${href}`;
+
+  const scrollToSection = (href: string) => {
+    const id = href.replace("#", "");
+    const section = document.getElementById(id);
+
+    if (!section) return;
+
+    const top = section.getBoundingClientRect().top + window.scrollY - 96;
+    window.scrollTo({ top, behavior: "smooth" });
+  };
+
+  const handleNavClick = (href: string) => {
+    setOpen(false);
+
+    if (location.pathname !== "/") {
+      navigate("/");
+      window.setTimeout(() => scrollToSection(href), 120);
+      return;
+    }
+
+    scrollToSection(href);
   };
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'glass py-3' : 'py-5 bg-transparent'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}
     >
-      <div className="max-w-7xl mx-auto px-5 flex items-center justify-between">
+      <div
+        className={`mx-auto max-w-7xl px-5 transition-all ${scrolled ? "rounded-full section-card" : ""}`}
+      >
+        <div className="flex items-center justify-between rounded-full px-4 py-3">
+          <a
+            href={getHref("#home")}
+            className="text-lg font-semibold tracking-[0.2em] text-[var(--text)]"
+          >
+            KFN<span className="text-[var(--accent)]">.</span>
+          </a>
 
-        {/* Logo */}
-        <a
-          href={getHref('#home')}
-          className="font-display text-2xl tracking-wider gradient-text-sunset"
-        >
-          KFN<span className="neon-text-pink">.</span>
-        </a>
-
-        {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-7">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={getHref(l.href)}
-              className="text-sm font-medium text-[var(--text-soft)] hover:text-[var(--text)] transition-colors relative group"
+          <div className="hidden lg:flex items-center gap-2">
+            {links.map((l) => {
+              const isActive = activeSection === l.href;
+              return (
+                <a
+                  key={l.href}
+                  href={getHref(l.href)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(l.href);
+                  }}
+                  className={`rounded-full px-3 py-2 text-sm font-medium transition-all ${
+                    isActive
+                      ? "bg-[var(--accent-soft)] text-[var(--text)] shadow-sm"
+                      : "text-[var(--text-soft)] hover:bg-[var(--bg-soft)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
+            <button
+              onClick={toggle}
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5 transition-transform hover:scale-105"
+              aria-label="Toggle theme"
             >
-              {l.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-[#FF2E93] to-[#22D3EE] group-hover:w-full transition-all duration-300" />
-            </a>
-          ))}
+              {theme === "dark" ? (
+                <Sun size={18} className="text-[var(--accent)]" />
+              ) : (
+                <Moon size={18} className="text-[var(--accent)]" />
+              )}
+            </button>
+          </div>
 
-          <button
-            onClick={toggle}
-            className="p-2 rounded-lg neon-border-pink hover:scale-110 transition-transform"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? (
-              <Sun size={18} className="neon-text-orange" />
-            ) : (
-              <Moon size={18} className="neon-text-purple" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile */}
-        <div className="lg:hidden flex items-center gap-3">
-          <button
-            onClick={toggle}
-            className="p-2 rounded-lg neon-border-pink"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? (
-              <Sun size={18} className="neon-text-orange" />
-            ) : (
-              <Moon size={18} className="neon-text-purple" />
-            )}
-          </button>
-
-          <button
-            onClick={() => setOpen(!open)}
-            className="p-2"
-            aria-label="Menu"
-          >
-            {open ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="flex items-center gap-3 lg:hidden">
+            <button
+              onClick={toggle}
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5"
+              aria-label="Toggle theme"
+            >
+              {theme === "dark" ? (
+                <Sun size={18} className="text-[var(--accent)]" />
+              ) : (
+                <Moon size={18} className="text-[var(--accent)]" />
+              )}
+            </button>
+            <button
+              onClick={() => setOpen(!open)}
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5"
+              aria-label="Menu"
+            >
+              {open ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <motion.div
         initial={false}
-        animate={{ height: open ? 'auto' : 0, opacity: open ? 1 : 0 }}
-        className="lg:hidden overflow-hidden glass mx-5 mt-3 rounded-2xl"
+        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
+        className="mx-5 mt-3 overflow-hidden rounded-2xl section-card lg:hidden"
       >
-        <div className="flex flex-col p-4 gap-3">
-          {links.map((l) => (
-            <a
-              key={l.href}
-              href={getHref(l.href)}
-              onClick={() => setOpen(false)}
-              className="text-sm font-medium text-[var(--text-soft)] hover:neon-text-pink transition-colors py-2"
-            >
-              {l.label}
-            </a>
-          ))}
+        <div className="flex flex-col gap-2 p-4">
+          {links.map((l) => {
+            const isActive = activeSection === l.href;
+            return (
+              <a
+                key={l.href}
+                href={getHref(l.href)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(l.href);
+                }}
+                className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "bg-[var(--accent-soft)] text-[var(--text)]"
+                    : "text-[var(--text-soft)] hover:bg-[var(--accent-soft)] hover:text-[var(--text)]"
+                }`}
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </div>
       </motion.div>
     </nav>
