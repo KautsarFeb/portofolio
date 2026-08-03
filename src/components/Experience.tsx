@@ -33,7 +33,7 @@ export default function Experience() {
         </motion.div>
 
         <div className="relative">
-          <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--accent)] via-sky-400 to-transparent" />
+          <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-[var(--accent)] to-transparent" />
 
           {experiences.map((exp) => (
             <motion.div
