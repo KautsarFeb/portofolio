@@ -12,19 +12,19 @@ const cards = [
     icon: Briefcase,
     title: "3+ Years of Experience",
     desc: "Experienced in working in customer-focused environments with consistent responsibilities.",
-    color: "sky",
+    color: "accent",
   },
   {
     icon: Code2,
     title: "Multi-Discipline Dev",
     desc: "Focused on web, mobile, and augmented reality with various technology stacks.",
-    color: "blue",
+    color: "accent",
   },
   {
     icon: Sparkles,
     title: "Lifelong Learner",
     desc: "Passionate about learning new things and staying updated with the latest technology trends.",
-    color: "slate",
+    color: "accent",
   },
 ];
 
