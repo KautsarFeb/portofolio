@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
-import { motion } from "framer-motion";
 import { useTheme } from "../contexts/ThemeContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -88,7 +87,8 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}
+      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}
+      style={{ WebkitTapHighlightColor: "transparent" }}
     >
       <div
         className={`mx-auto max-w-7xl px-5 transition-all ${scrolled ? "rounded-full section-card" : ""}`}
@@ -138,7 +138,9 @@ export default function Navbar() {
           <div className="flex items-center gap-3 lg:hidden">
             <button
               onClick={toggle}
-              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5"
+              onPointerDown={(e) => e.currentTarget.blur()}
+              type="button"
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5 min-w-[44px] min-h-[44px] touch-manipulation select-none"
               aria-label="Toggle theme"
             >
               {theme === "dark" ? (
@@ -149,8 +151,11 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => setOpen(!open)}
-              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5"
+              onPointerDown={(e) => e.currentTarget.blur()}
+              type="button"
+              className="rounded-full border border-[var(--border)] bg-[var(--bg-soft)] p-2.5 min-w-[44px] min-h-[44px] touch-manipulation select-none"
               aria-label="Menu"
+              style={{ WebkitTapHighlightColor: "transparent" }}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -158,34 +163,32 @@ export default function Navbar() {
         </div>
       </div>
 
-      <motion.div
-        initial={false}
-        animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-        className="mx-5 mt-3 overflow-hidden rounded-2xl section-card lg:hidden"
-      >
-        <div className="flex flex-col gap-2 p-4">
-          {links.map((l) => {
-            const isActive = activeSection === l.href;
-            return (
-              <a
-                key={l.href}
-                href={getHref(l.href)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(l.href);
-                }}
-                className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? "bg-[var(--accent-soft)] text-[var(--text)]"
-                    : "text-[var(--text-soft)] hover:bg-[var(--accent-soft)] hover:text-[var(--text)]"
-                }`}
-              >
-                {l.label}
-              </a>
-            );
-          })}
+      {open && (
+        <div className="mx-5 mt-3 rounded-2xl section-card lg:hidden relative z-[61]">
+          <div className="flex flex-col gap-2 p-4">
+            {links.map((l) => {
+              const isActive = activeSection === l.href;
+              return (
+                <a
+                  key={l.href}
+                  href={getHref(l.href)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(l.href);
+                  }}
+                  className={`rounded-xl px-3 py-2 text-sm font-medium transition-colors ${
+                    isActive
+                      ? "bg-[var(--accent-soft)] text-[var(--text)]"
+                      : "text-[var(--text-soft)] hover:bg-[var(--accent-soft)] hover:text-[var(--text)]"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
+          </div>
         </div>
-      </motion.div>
+      )}
     </nav>
   );
 }

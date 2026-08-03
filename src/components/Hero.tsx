@@ -31,9 +31,9 @@ export default function Hero() {
             A 7th semester Information Technology student at Universitas Bina
             Sarana Informatika (UBSI) with more than three years of experience
             in laptop sales, technical troubleshooting, customer service, and
-            the development of web, mobile, and augmented reality applications.
-            Passionate about technology, problem-solving, and creating
-            innovative digital solutions.
+            right now focusing on the development of web, mobile, and augmented
+            reality applications. Passionate about technology, problem-solving,
+            and creating innovative digital solutions.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
